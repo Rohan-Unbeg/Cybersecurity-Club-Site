@@ -1,0 +1,236 @@
+<%- include('partials/header') %>
+<%- include('partials/nav-nofix') %>
+
+<style>
+  .container-fluid {
+    margin-top: 20px;
+  }
+
+  /* Layout with sidebar */
+  .blog-content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .blog-main {
+    flex: 0 0 70%; /* Main blog takes up 70% */
+    padding-right: 20px;
+  }
+
+  .sidebar {
+    flex: 0 0 30%; /* Sidebar takes up 30% */
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Blog card styles */
+  .blog-card {
+    margin-bottom: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .blog-card-body {
+    padding: 20px;
+  }
+
+  .blog-card-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .blog-card-text {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .blog-card-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+  }
+
+  .blog-card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Sidebar styles */
+  .sidebar h4 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    margin-bottom: 10px;
+  }
+
+  .sidebar ul li a {
+    text-decoration: none;
+    color: #007bff;
+  }
+
+  .sidebar ul li a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-4">Latest Blog Posts</h2>
+    </div>
+  </div>
+  
+  <div class="row blog-content">
+    <!-- Blog Main Section -->
+    <div class="col-md-8 blog-main">
+      <div id="medium-feed"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-md-4 sidebar">
+      <h4>Categories</h4>
+      <ul id="category-list">
+        <!-- Categories will be dynamically populated -->
+      </ul>
+      
+      <h4>Latest Articles</h4>
+      <ul id="latest-articles">
+        <!-- Latest articles will be dynamically populated -->
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const feedUrl = "http://localhost:3000/medium-feed";
+      let blogItems = []; // Store blog posts for filtering
+  
+      fetch(feedUrl)
+        .then((response) => response.text())
+        .then((str) =>
+          new window.DOMParser().parseFromString(str, "text/xml")
+        )
+        .then((data) => {
+          const items = data.querySelectorAll("item");
+          let html = "";
+          let categories = new Set(); // To collect categories
+          let latestArticlesHtml = "";
+  
+          if (items.length === 0) {
+            html = "<p>No blog posts available.</p>";
+          } else {
+            items.forEach((el, index) => {
+              const link = el.querySelector("link")
+                ? el.querySelector("link").textContent
+                : "#";
+              const title = el.querySelector("title")
+                ? el.querySelector("title").textContent
+                : "No title";
+              const description = el.querySelector("description")
+                ? el.querySelector("description").textContent
+                : "No description";
+  
+              // Truncate description
+              const truncatedDescription =
+                description.length > 150
+                  ? description.substring(0, 150) + "..."
+                  : description;
+  
+              // Assign a random category for simulation
+              const randomCategories = [
+                "Cybersecurity",
+                "Malware",
+                "Ransomware",
+                "Tutorials",
+                "AI in Security",
+              ];
+              const randomCategory =
+                randomCategories[Math.floor(Math.random() * randomCategories.length)];
+              categories.add(randomCategory);
+  
+              // Store the blog post in the array
+              blogItems.push({
+                link,
+                title,
+                truncatedDescription,
+                category: randomCategory, // Store the category
+              });
+  
+              // Add to the latest articles section (limit to 3)
+              if (index < 3) {
+                latestArticlesHtml += `<li><a href="${link}" target="_blank">${title}</a></li>`;
+              }
+            });
+  
+            // Render the posts initially
+            renderBlogPosts(blogItems);
+  
+            // Populate the categories section
+            const categoryList = Array.from(categories)
+              .map(
+                (category) => `<li><a href="#" class="category-filter" data-category="${category}">${category}</a></li>`
+              )
+              .join("");
+            document.getElementById("category-list").innerHTML = categoryList;
+  
+            // Populate the latest articles section
+            document.getElementById("latest-articles").innerHTML = latestArticlesHtml;
+  
+            // Add event listeners to the category links
+            document.querySelectorAll(".category-filter").forEach((el) => {
+              el.addEventListener("click", function (e) {
+                e.preventDefault();
+                const category = e.target.getAttribute("data-category");
+                filterBlogPostsByCategory(category);
+              });
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching Medium RSS feed:", error);
+          document.getElementById("medium-feed").innerHTML =
+            "<p>Failed to load blog posts.</p>";
+        });
+  
+      // Function to render blog posts
+      function renderBlogPosts(posts) {
+        let html = "";
+        posts.forEach((post) => {
+          html += `
+            <div class="blog-card">
+              <div class="blog-card-body">
+                <h3 class="blog-card-title">${post.title}</h3>
+                <p class="blog-card-text">${post.truncatedDescription}</p>
+                <a href="${post.link}" class="blog-card-link" target="_blank">Read More</a>
+              </div>
+            </div>
+          `;
+        });
+        document.getElementById("medium-feed").innerHTML = html;
+      }
+  
+      // Function to filter blog posts by category
+      function filterBlogPostsByCategory(category) {
+        const filteredPosts = blogItems.filter(
+          (post) => post.category === category
+        );
+        renderBlogPosts(filteredPosts);
+      }
+    });
+  </script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

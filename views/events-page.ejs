@@ -1,0 +1,65 @@
+<%- include('partials/header') %>
+<%- include('partials/nav-nofix') %>
+
+<style>
+  .events-section {
+    padding: 50px 0;
+    background-color: #f8f9fa;
+  }
+
+  .event-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .event-card h5 {
+    margin-bottom: 10px;
+  }
+
+  .event-card p {
+    margin-bottom: 5px;
+  }
+
+  .event-card-date {
+    font-weight: bold;
+    color: #6c757d;
+  }
+
+  .event-card-location {
+    color: #007bff;
+  }
+</style>
+
+<div class="container events-section">
+  <h2 class="text-center mb-5">Upcoming Events</h2>
+  
+  <div class="event-card">
+    <h5>Cybersecurity Workshop</h5>
+    <p class="event-card-date">October 15, 2024</p>
+    <p class="event-card-location">Online Webinar</p>
+    <p>Join us for an in-depth workshop on the latest trends and technologies in cybersecurity. Learn about threat detection, incident response, and more.</p>
+  </div>
+
+  <div class="event-card">
+    <h5>Network Security Conference</h5>
+    <p class="event-card-date">November 2, 2024</p>
+    <p class="event-card-location">New York City</p>
+    <p>This conference brings together industry leaders to discuss the future of network security. Don't miss out on keynote speeches, workshops, and networking opportunities.</p>
+  </div>
+
+  <div class="event-card">
+    <h5>Penetration Testing Bootcamp</h5>
+    <p class="event-card-date">December 10, 2024</p>
+    <p class="event-card-location">San Francisco</p>
+    <p>Learn the skills and techniques used by penetration testers to identify and mitigate security risks. Hands-on labs included.</p>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

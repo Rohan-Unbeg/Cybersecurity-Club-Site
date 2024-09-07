@@ -1,0 +1,71 @@
+<style>
+    .benefits-section {
+      background-color: #6f42c1; /* Purplish background */
+      padding: 50px 0;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      height: 300px; /* Fixed height for equal size */
+      max-width: 300px; /* Fixed width to ensure equal size */
+    }
+    .card-icon {
+      font-size: 3rem;
+      color: #6f42c1; /* Icon color matching the background */
+      margin-bottom: 15px;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      margin: 10px 0;
+    }
+    .card-text {
+      font-size: 0.875rem;
+    }
+  </style>
+  
+  <div class="container-fluid text-center benefits-section">
+    <h2 class="text-white mb-4">Membership Benefits</h2>
+    <div class="row justify-content-center">
+      <!-- Card 1: Events & Activities -->
+      <div class="col-md-4 d-flex justify-content-center mb-4">
+        <div class="card">
+          <i class="bi bi-calendar card-icon"></i>
+          <h5 class="card-title">Events & Activities</h5>
+          <p class="card-text">
+            Be the first to know about what we have planned and add our group calendar to your schedule.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Card 2: Exclusive Resources -->
+      <div class="col-md-4 d-flex justify-content-center mb-4">
+        <div class="card">
+          <i class="bi bi-lock card-icon"></i>
+          <h5 class="card-title">Exclusive Resources</h5>
+          <p class="card-text">
+            Membership in our organization grants access to our club infrastructure.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Card 3: Connections -->
+      <div class="col-md-4 d-flex justify-content-center mb-4">
+        <div class="card">
+          <i class="bi bi-people card-icon"></i>
+          <h5 class="card-title">Connections</h5>
+          <p class="card-text">
+            Meeting new students with shared interests.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

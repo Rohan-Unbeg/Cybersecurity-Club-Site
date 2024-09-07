@@ -1,0 +1,60 @@
+<div class="container" style="max-width: 800px; padding: 30px;">
+  <h2 class="text-center mb-4">Contact Us</h2>
+  <form id="contactForm">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Your Name" required>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email" placeholder="Your Email" required>
+    </div>
+    <div class="mb-3">
+      <label for="message" class="form-label">Message</label>
+      <textarea class="form-control" id="message" rows="4" placeholder="Your Message" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+  </form>
+  <div id="responseMessage" class="mt-3"></div>
+</div>
+
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent the default form submission behavior
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+
+    fetch('/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, message }),
+    })
+    .then(response => response.text())
+    .then(data => {
+      // Show success alert
+      showAlert('Message sent successfully!', 'success');
+      // Clear the form after submission
+      document.getElementById('contactForm').reset();
+    })
+    .catch(error => {
+      // Show error alert
+      showAlert('Error sending message. Please try again later.', 'danger');
+      console.error('Error:', error);
+    });
+  });
+
+  // Function to display the alert
+  function showAlert(message, type) {
+    const alertBox = `
+      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `;
+    document.getElementById('responseMessage').innerHTML = alertBox;
+  }
+</script>

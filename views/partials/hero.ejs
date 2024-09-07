@@ -1,0 +1,43 @@
+<style>
+  .hero-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Layer below the content */
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2; /* Layer above the overlay */
+  }
+  .hero-section {
+    padding-top: 70px; /* Adjust this value based on the height of your navbar */
+  }
+</style>
+
+<div class="hero">
+  <section
+    class="hero-section"
+    style="
+      background-image: url('/images/hero1.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      position: relative;
+    "
+  >
+    <div class="hero-overlay"></div>
+    <div
+      class="container h-100 d-flex align-items-center justify-content-center hero-content"
+    >
+      <div class="text-center text-white">
+        <h1 class="display-3">TCOER Cybersecurity Student Association</h1>
+        <p class="lead">Your journey begins here</p>
+        <a href="#" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#joinModal">Join Now</a>
+
+      </div>
+    </div>
+  </section>
+</div>

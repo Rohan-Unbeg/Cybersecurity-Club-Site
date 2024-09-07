@@ -1,0 +1,81 @@
+<style>
+  .blog-card {
+    margin-bottom: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  .blog-card-body {
+    padding: 20px;
+  }
+  .blog-card-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  .blog-card-text {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  .blog-card-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+  }
+  .blog-card-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="container-fluid">
+  <section id="recent-posts" class="my-4">
+    <h2>Latest Blog Posts</h2>
+    <div id="medium-feed"></div>
+  </section>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const feedUrl = 'http://localhost:3000/medium-feed';
+
+    fetch(feedUrl)
+      .then(response => response.text())
+      .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+      .then(data => {
+        const items = data.querySelectorAll('item');
+        let html = '';
+        if (items.length === 0) {
+          html = '<p>No blog posts available.</p>';
+        } else {
+          // Limit to 4 posts
+          items.forEach((el, index) => {
+            if (index < 4) {
+              const link = el.querySelector('link') ? el.querySelector('link').textContent : '#';
+              const title = el.querySelector('title') ? el.querySelector('title').textContent : 'No title';
+              const description = el.querySelector('description') ? el.querySelector('description').textContent : 'No description';
+              
+              // Truncate description
+              const truncatedDescription = description.length > 150 ? description.substring(0, 150) + '...' : description;
+
+              html += `
+                <div class="blog-card">
+                  <div class="blog-card-body">
+                    <h3 class="blog-card-title">${title}</h3>
+                    <p class="blog-card-text">${truncatedDescription}</p>
+                    <a href="${link}" class="blog-card-link" target="_blank">Read More</a>
+                  </div>
+                </div>
+              `;
+            }
+          });
+        }
+        document.getElementById('medium-feed').innerHTML = html;
+      })
+      .catch(error => {
+        console.error('Error fetching Medium RSS feed:', error);
+        document.getElementById('medium-feed').innerHTML = '<p>Failed to load blog posts.</p>';
+      });
+  });
+</script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
