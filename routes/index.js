@@ -11,7 +11,9 @@ const filePath = path.join(dataFolderPath, 'join-requests.xlsx');
 
 router.use(cors({
   origin: 'https://cybersec-tcoer.onrender.com'
+  // origin: 'http://localhost:3000'
 }));
+// router.use(cors());
 
 router.get("/", function (req, res, next) {
   res.render("index", { title: "TCOER | Cybersecurity Club" });
@@ -80,9 +82,6 @@ router.post('/submit-join-form', async (req, res) => {
     res.status(500).send('Failed to save data.');
   }
 });
-
-
-
 
 router.post('/send-email', (req, res) => {
   const { name, email, message } = req.body;
