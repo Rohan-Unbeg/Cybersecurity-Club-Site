@@ -3,13 +3,15 @@ var router = express.Router();
 const fs = require('fs');
 const request = require("request");
 const nodemailer = require('nodemailer')
-// const ExcelJS = require('exceljs');
+const cors = require('cors');
 const XLSX = require('xlsx');
 const path = require('path');
 const dataFolderPath = path.join(__dirname, 'data');
 const filePath = path.join(dataFolderPath, 'join-requests.xlsx');
-// const filePath = '/data/join-requests.xlsx';
 
+app.use(cors({
+  origin: 'https://cybersec-tcoer.onrender.com'
+}));
 
 router.get("/", function (req, res, next) {
   res.render("index", { title: "TCOER | Cybersecurity Club" });
@@ -38,39 +40,6 @@ router.get("/events", (req, res) => {
 router.get("/contact", (req, res) => {
   res.render("contact-page", { title: "TCOER | Cybersecurity Club" });
 });
-
-// router.post('/submit-join-form', async (req, res) => {
-//   const { name, email, message } = req.body;
-
-//   try {
-//     // Check if the file exists and read it
-//     const fileExists = fs.existsSync(filePath);
-//     const workbook = new ExcelJS.Workbook();
-//     const sheet = fileExists ? await workbook.xlsx.readFile(filePath) : workbook.addWorksheet('Join Requests');
-
-//     // Add headers if the file is newly created
-//     if (!fileExists) {
-//       sheet.columns = [
-//         { header: 'Name', key: 'name' },
-//         { header: 'Email', key: 'email' },
-//         { header: 'Message', key: 'message' },
-//       ];
-//     }
-
-//     // Add new row to the sheet
-//     Worksheet.addRow({ name, email, message });
-
-//     // Save the workbook to file
-//     await workbook.xlsx.writeFile(filePath);
-
-//     res.send('Form data saved to Excel sheet.');
-//   } catch (error) {
-//     console.error('Error saving to Excel:', error);
-//     res.status(500).send('Failed to save data.');
-//   }
-// });
-
-
 
 router.post('/submit-join-form', async (req, res) => {
   console.log('Request Body:', req.body);
