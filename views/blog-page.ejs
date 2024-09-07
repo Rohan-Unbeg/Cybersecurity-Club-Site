@@ -118,91 +118,28 @@
       let blogItems = []; // Store blog posts for filtering
   
       fetch(feedUrl)
-        .then((response) => response.text())
-        .then((str) =>
-          new window.DOMParser().parseFromString(str, "text/xml")
-        )
-        .then((data) => {
-          const items = data.querySelectorAll("item");
-          let html = "";
-          let categories = new Set(); // To collect categories
-          let latestArticlesHtml = "";
-  
-          if (items.length === 0) {
-            html = "<p>No blog posts available.</p>";
-          } else {
-            items.forEach((el, index) => {
-              const link = el.querySelector("link")
-                ? el.querySelector("link").textContent
-                : "#";
-              const title = el.querySelector("title")
-                ? el.querySelector("title").textContent
-                : "No title";
-              const description = el.querySelector("description")
-                ? el.querySelector("description").textContent
-                : "No description";
-  
-              // Truncate description
-              const truncatedDescription =
-                description.length > 150
-                  ? description.substring(0, 150) + "..."
-                  : description;
-  
-              // Assign a random category for simulation
-              const randomCategories = [
-                "Cybersecurity",
-                "Malware",
-                "Ransomware",
-                "Tutorials",
-                "AI in Security",
-              ];
-              const randomCategory =
-                randomCategories[Math.floor(Math.random() * randomCategories.length)];
-              categories.add(randomCategory);
-  
-              // Store the blog post in the array
-              blogItems.push({
-                link,
-                title,
-                truncatedDescription,
-                category: randomCategory, // Store the category
-              });
-  
-              // Add to the latest articles section (limit to 3)
-              if (index < 3) {
-                latestArticlesHtml += `<li><a href="${link}" target="_blank">${title}</a></li>`;
-              }
-            });
-  
-            // Render the posts initially
-            renderBlogPosts(blogItems);
-  
-            // Populate the categories section
-            const categoryList = Array.from(categories)
-              .map(
-                (category) => `<li><a href="#" class="category-filter" data-category="${category}">${category}</a></li>`
-              )
-              .join("");
-            document.getElementById("category-list").innerHTML = categoryList;
-  
-            // Populate the latest articles section
-            document.getElementById("latest-articles").innerHTML = latestArticlesHtml;
-  
-            // Add event listeners to the category links
-            document.querySelectorAll(".category-filter").forEach((el) => {
-              el.addEventListener("click", function (e) {
-                e.preventDefault();
-                const category = e.target.getAttribute("data-category");
-                filterBlogPostsByCategory(category);
-              });
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching Medium RSS feed:", error);
-          document.getElementById("medium-feed").innerHTML =
-            "<p>Failed to load blog posts.</p>";
-        });
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.text();
+  })
+  .then((str) => new window.DOMParser().parseFromString(str, "text/xml"))
+  .then((data) => {
+    const items = data.querySelectorAll("item");
+    if (items.length === 0) {
+      document.getElementById("medium-feed").innerHTML =
+        "<p>No blog posts available.</p>";
+    } else {
+      // existing code
+    }
+  })
+  .catch((error) => {
+    console.error("Error fetching Medium RSS feed:", error);
+    document.getElementById("medium-feed").innerHTML =
+      "<p>Failed to load blog posts. Please try again later.</p>";
+  });
+
   
       // Function to render blog posts
       function renderBlogPosts(posts) {

@@ -9,11 +9,17 @@ const path = require('path');
 const dataFolderPath = path.join(__dirname, 'data');
 const filePath = path.join(dataFolderPath, 'join-requests.xlsx');
 
-router.use(cors({
-  origin: 'https://cybersec-tcoer.onrender.com'
-  // origin: 'http://localhost:3000'
-}));
+// router.use(cors({
+//   origin: 'https://cybersec-tcoer.onrender.com'
+//   // origin: 'http://localhost:3000'
+// }));
 // router.use(cors());
+
+router.use(cors({
+  origin: 'https://cybersec-tcoer.onrender.com',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 router.get("/", function (req, res, next) {
   res.render("index", { title: "TCOER | Cybersecurity Club" });
