@@ -9,7 +9,7 @@ const path = require('path');
 const dataFolderPath = path.join(__dirname, 'data');
 const filePath = path.join(dataFolderPath, 'join-requests.xlsx');
 
-app.use(cors({
+router.use(cors({
   origin: 'https://cybersec-tcoer.onrender.com'
 }));
 
